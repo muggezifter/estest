@@ -30,7 +30,9 @@
             </tr>
         {% endfor %}
     </table>
-    {{ count > 10 ?  "10" : count }}/{{ count }} results
+    {{ count > 10 ?  "10" : count }}/{{ count }} results -  <a href="{{  path('matchPost') }}">new match</a>
+
+
 {% endblock %}
 
 {% block stylesheets %}
