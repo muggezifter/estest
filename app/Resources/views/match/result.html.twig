@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+        {{  dump(queryArray) }}
+
     <table>
         <tr>
             <th>Score</th>
@@ -30,25 +33,29 @@
             </tr>
         {% endfor %}
     </table>
+    <span id="count">
     {{ count > 10 ?  "10" : count }}/{{ count }} results -  <a href="{{  path('matchPost') }}">new match</a>
-
+    </span>
 
 {% endblock %}
 
 {% block stylesheets %}
 <style>
+    body {
+        margin:0; padding: 0;
+    }
     table {
         border-collapse: collapse;
+        margin: 10px;
     }
-
+    #count {
+        margin: 0 10px;
+    }
     table, th, td {
         border: 1px solid black;
     }
-
     td {
-        padding:0 5px
+        padding:0 5px;
     }
-
-
 </style>
 {% endblock %}

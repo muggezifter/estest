@@ -57,9 +57,11 @@ class DefaultController extends Controller
 
         $search->addQuery($bool);
 
+        $queryArray = $search->toArray();
+
         $results = $repo->execute($search,Result::RESULTS_RAW_ITERATOR);
         $count = count($results);
-        return $this->render('match/result.html.twig', compact("results","count"));
+        return $this->render('match/result.html.twig', compact("queryArray","results","count"));
     }
 
     function makeMQ($val, $name) {
