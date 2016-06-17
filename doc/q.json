@@ -1,0 +1,25 @@
+
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "match": {
+            "categories.name": {
+              "query": "Trinity",
+              "_name": "tri"
+            }
+          }
+        },
+        {
+          "match": {
+            "categories.name": {
+              "query": "Neo",
+              "_name": "neo"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
