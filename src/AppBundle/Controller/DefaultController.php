@@ -74,7 +74,7 @@ class DefaultController extends Controller
 
         $catsBQ = new BoolQuery();
         $catsBQ->addParameter("minimum_should_match", 1);
-        //$catsBQ->addParameter("boost", 1);
+        $catsBQ->addParameter("boost", 2);
 
         foreach ($this->categories as $code=>$label) {
             $request->get($code) && $catsBQ->add($this->makeMQ('categories', $label, $code), BoolQuery::SHOULD);
@@ -82,6 +82,7 @@ class DefaultController extends Controller
 
         $daysBQ = new BoolQuery();
         $daysBQ->addParameter("minimum_should_match", 1);
+        $daysBQ->addParameter("boost", 1);
 
         foreach ($this->weekdays as $code=>$label) {
             $request->get($code) && $daysBQ->add($this->makeMQ('days', $label, $code), BoolQuery::SHOULD);
