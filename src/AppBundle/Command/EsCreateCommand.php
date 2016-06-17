@@ -2,15 +2,18 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Document\Category;
+use AppBundle\Document\Day;
+use AppBundle\Document\Item;
+use Faker;
+use Faker\Factory;
+use Faker\Provider\nl_NL\Person;
+use Faker\Provider\Lorem;
+use ONGR\ElasticsearchBundle\Service\Manager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ONGR\ElasticsearchBundle\Service\Manager;
-use AppBundle\Document\Item;
-use AppBundle\Document\Day;
-use AppBundle\Document\Category;
-use Faker;
 
 
 class EsCreateCommand extends ContainerAwareCommand
@@ -35,6 +38,14 @@ class EsCreateCommand extends ContainerAwareCommand
      */
     private $filters;
 
+    /**
+     * Construct a new EsCreateCommand.
+     *
+     * @param Manager $manager
+     * @param array $weekdays
+     * @param array $categories
+     * @param array $filters
+     */
     public function __construct(
         Manager $manager,
         array $weekdays,
@@ -58,9 +69,10 @@ class EsCreateCommand extends ContainerAwareCommand
             ->addArgument(
                 'number',
                 InputArgument::OPTIONAL,
-                'How many items do you mant to create?'
+                'How many items do you want to create?'
             );
     }
+
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -70,14 +82,14 @@ class EsCreateCommand extends ContainerAwareCommand
             $number = intval($number);
             if ($number < 0 || $number > 1000) {
                 $output->writeln("number should be between 1 and 1000");
-                return;
+                return;;
             }
             $nItems = $number;
         }
 
-        $faker = Faker\Factory::create();
-        $faker->addProvider(new Faker\Provider\nl_NL\Person($faker));
-        $faker->addProvider(new Faker\Provider\Lorem($faker));
+        $faker = Factory::create();
+        $faker->addProvider(new Person($faker));
+        $faker->addProvider(new Lorem($faker));
 
         for ($x = 0; $x < $nItems; $x++) {
             $item = new Item();
@@ -86,7 +98,7 @@ class EsCreateCommand extends ContainerAwareCommand
             $item->text = $faker->paragraph(5);
             $item->location = $faker->latitude(51, 52) . "," . $faker->longitude(4, 5);
 
-            $item->filter = array_rand(array_flip($this->filters),1);
+            $item->filter = array_rand(array_flip($this->filters), 1);
 
             $cats = array_rand(array_flip($this->categories), rand(1, 4));
             foreach ((array)$cats as $cat) {
