@@ -15,13 +15,39 @@ use Faker;
 
 class EsCreateCommand extends ContainerAwareCommand
 {
+    /**
+     * @var Manager
+     */
     private $manager;
 
-    public function __construct(Manager $manager)
+    /**
+     * @var array
+     */
+    private $weekdays;
+
+    /**
+     * @var array
+     */
+    private $categories;
+
+    /**
+     * @var array
+     */
+    private $filters;
+
+    public function __construct(
+        Manager $manager,
+        array $weekdays,
+        array $categories,
+        array $filters
+    )
     {
         parent::__construct();
-        $this->manager = $manager;
 
+        $this->manager = $manager;
+        $this->weekdays = array_keys(array_flip($weekdays));
+        $this->categories = array_keys(array_flip($categories));
+        $this->filters = array_keys(array_flip($filters));
     }
 
     protected function configure()
@@ -53,10 +79,6 @@ class EsCreateCommand extends ContainerAwareCommand
         $faker->addProvider(new Faker\Provider\nl_NL\Person($faker));
         $faker->addProvider(new Faker\Provider\Lorem($faker));
 
-        $categories = array("Neo", "Morpheus", "Trinity", "Cypher", "Tank");
-        $weekdays = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        $filters = array("Kelvin","Toaster","Lo-Fi");
-
         for ($x = 0; $x < $nItems; $x++) {
             $item = new Item();
 
@@ -64,20 +86,17 @@ class EsCreateCommand extends ContainerAwareCommand
             $item->text = $faker->paragraph(5);
             $item->location = $faker->latitude(51, 52) . "," . $faker->longitude(4, 5);
 
-            $item->filter = array_rand(array_flip($filters),1);
+            $item->filter = array_rand(array_flip($this->filters),1);
 
-            $cats = array_rand(array_flip($categories), rand(1, 4));
+            $cats = array_rand(array_flip($this->categories), rand(1, 4));
             foreach ((array)$cats as $cat) {
                 $item->categories[] = new Category($cat);
             }
 
-            $days = array_rand(array_flip($weekdays), rand(1, 6));
+            $days = array_rand(array_flip($this->weekdays), rand(1, 6));
             foreach ((array)$days as $day) {
                 $item->days[] = new Day($day);
             }
-
-
-
 
             $this->manager->persist($item);
             $this->manager->commit();

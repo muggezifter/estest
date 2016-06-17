@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Matcher\Matcher;
+use AppBundle\Service\Matcher;
 
 class DefaultController extends Controller
 {
@@ -44,10 +44,12 @@ class DefaultController extends Controller
      */
     public function matchPostAction(Request $request)
     {
-        $matcher = new Matcher(
-            $this->get('es.manager'),
-            $this->getParameter('estest.items.weekdays')
-        );
+//        $matcher = new Matcher(
+//            $this->get('es.manager'),
+//            $this->getParameter('estest.items.weekdays')
+//        );
+
+        $matcher = $this->get('app.estest.matcher');
         return $this->render('match/result.html.twig', $matcher->match($request));
     }
 }

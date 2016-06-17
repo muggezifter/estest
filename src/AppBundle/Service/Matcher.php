@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Matcher;
+namespace AppBundle\Service;
 
 use ONGR\ElasticsearchBundle\Service\Manager;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,13 +17,7 @@ class Matcher
      *
      * @var array
      */
-    private $categories = [
-        "neo" => "Neo",
-        "tri" => "Trinity",
-        "cyp" => "Cypher",
-        "mor" => "Morpheus",
-        "tan" => "Tank",
-    ];
+    private $categories;
 
     /**
      * Folters array.
@@ -51,12 +45,20 @@ class Matcher
      *
      * @param Manager $manager
      * @param array $weekdays
+     * @param array $categories
+     * @param array $filters
      */
-    public function __construct(Manager $manager, array $weekdays)
+    public function __construct(
+        Manager $manager,
+        array $weekdays,
+        array $categories,
+        array $filters
+    )
     {
         $this->manager = $manager;
         $this->weekdays = $weekdays;
-        $this->filters = array("kel" => "Kelvin", "toa" => "Toaster", "lof" => "Lo-Fi");
+        $this->categories = $categories;
+        $this->filters = $filters;
     }
 
     /**
@@ -70,8 +72,8 @@ class Matcher
         $search = new Search();
 
         $search->addQuery(new MatchQuery("filter", $this->filters[$request->get("filter")]));
-        $search->addQuery($this->makeBQ($request,$this->categories,'categories',2));
-        $search->addQuery($this->makeBQ($request,$this->weekdays,'days',1));
+        $search->addQuery($this->makeBQ($request, $this->categories, 'categories', 2));
+        $search->addQuery($this->makeBQ($request, $this->weekdays, 'days', 1));
 
         $queryArray = $search->toArray();
 
