@@ -16,6 +16,7 @@ class Item
     public function __construct()
     {
         $this->categories = new Collection();
+        $this->days = new Collection();
     }
     /**
      * @var string
@@ -32,6 +33,12 @@ class Item
     /**
      * @var string
      *
+     * @ES\Property(name="filter", type="string")
+     */
+    public $filter;
+    /**
+     * @var string
+     *
      * @ES\Property(name="text", type="string")
      */
     public $text;
@@ -41,7 +48,12 @@ class Item
      * @ES\Embedded(class="AppBundle:Category", multiple=true)
      */
     public $categories;
-
+    /**
+     * @var Day[]|Collection
+     *
+     * @ES\Embedded(class="AppBundle:Day", multiple=true)
+     */
+    public $days;
     /**
      *
      * @var string

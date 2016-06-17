@@ -16,6 +16,30 @@ use AppBundle\Document\Item;
 class DefaultController extends Controller
 {
     /**
+     * @var array
+     */
+    private $categories = [
+       "neo"=>"Neo",
+       "tri"=>"Trinity",
+       "cyp"=>"Cypher",
+       "mor"=>"Morpheus",
+       "tan"=>"Tank",
+    ];
+
+    /**
+     * @var array
+     */
+    private $weekdays = [
+        "sun"=>"Sunday",
+        "mon"=>"Monday",
+        "tue"=>"Tuesday",
+        "wed"=>"Wednesday",
+        "thu"=>"Thursday",
+        "fri"=>"Friday",
+        "sat"=>"Saturday",
+    ];
+
+    /**
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
@@ -45,17 +69,27 @@ class DefaultController extends Controller
 
         $search = new Search();
 
-        $bool = new BoolQuery();
-        $bool->addParameter("minimum_should_match", 1);
-        $bool->addParameter("boost", 1);
+        $filters = array("kel"=>"Kelvin","toa"=>"Toaster","lof"=>"Lo-Fi");
+        $filtersMQ = new MatchQuery("filter", $filters[$request->get("filter")]);
 
-        $request->get("neo") && $bool->add($this->makeMQ("Neo", "neo"), BoolQuery::SHOULD);
-        $request->get("tri") && $bool->add($this->makeMQ("Trinity", "tri"), BoolQuery::SHOULD);
-        $request->get("cyp") && $bool->add($this->makeMQ("Cypher", "cyp"), BoolQuery::SHOULD);
-        $request->get("mor") && $bool->add($this->makeMQ("Morpheus", "mor"), BoolQuery::SHOULD);
-        $request->get("tan") && $bool->add($this->makeMQ("Tank", "tan"), BoolQuery::SHOULD);
+        $catsBQ = new BoolQuery();
+        $catsBQ->addParameter("minimum_should_match", 1);
+        //$catsBQ->addParameter("boost", 1);
 
-        $search->addQuery($bool);
+        foreach ($this->categories as $code=>$label) {
+            $request->get($code) && $catsBQ->add($this->makeMQ('categories', $label, $code), BoolQuery::SHOULD);
+        }
+
+        $daysBQ = new BoolQuery();
+        $daysBQ->addParameter("minimum_should_match", 1);
+
+        foreach ($this->weekdays as $code=>$label) {
+            $request->get($code) && $daysBQ->add($this->makeMQ('days', $label, $code), BoolQuery::SHOULD);
+        }
+
+        $search->addQuery($filtersMQ);
+        $search->addQuery($catsBQ);
+        $search->addQuery($daysBQ);
 
         $queryArray = $search->toArray();
 
@@ -64,8 +98,38 @@ class DefaultController extends Controller
         return $this->render('match/result.html.twig', compact("queryArray","results","count"));
     }
 
-    function makeMQ($val, $name) {
-        $mq = new MatchQuery("categories.name",$val);
+    /**
+     * Make MatchQuery for Days.
+     *
+     * @param $val
+     * @param $name
+     * @return MatchQuery
+     */
+    private function makeDaysMQ($val, $name){
+        return $this->makeMQ('days',$val,$name);
+    }
+
+    /**
+     * Make MatchQuery for Categories.
+     *
+     * @param $val
+     * @param $name
+     * @return MatchQuery
+     */
+    private function makeCatsMQ($val, $name){
+        return $this->makeMQ('categories',$val,$name);
+    }
+
+    /**
+     * Make MatchQuery for $type.
+     *
+     * @param $type
+     * @param $val
+     * @param $name
+     * @return MatchQuery
+     */
+    private function makeMQ($type, $val, $name) {
+        $mq = new MatchQuery($type.".name",$val);
         $mq->addParameter("_name",$name);
         return $mq;
     }

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ONGR\ElasticsearchBundle\Service\Manager;
 use AppBundle\Document\Item;
+use AppBundle\Document\Day;
 use AppBundle\Document\Category;
 use Faker;
 
@@ -53,6 +54,9 @@ class EsCreateCommand extends ContainerAwareCommand
         $faker->addProvider(new Faker\Provider\Lorem($faker));
 
         $categories = array("Neo", "Morpheus", "Trinity", "Cypher", "Tank");
+        $weekdays = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        $filters = array("Kelvin","Toaster","Lo-Fi");
+
         for ($x = 0; $x < $nItems; $x++) {
             $item = new Item();
 
@@ -60,10 +64,20 @@ class EsCreateCommand extends ContainerAwareCommand
             $item->text = $faker->paragraph(5);
             $item->location = $faker->latitude(51, 52) . "," . $faker->longitude(4, 5);
 
+            $item->filter = array_rand(array_flip($filters),1);
+
             $cats = array_rand(array_flip($categories), rand(1, 4));
             foreach ((array)$cats as $cat) {
                 $item->categories[] = new Category($cat);
             }
+
+            $days = array_rand(array_flip($weekdays), rand(1, 6));
+            foreach ((array)$days as $day) {
+                $item->days[] = new Day($day);
+            }
+
+
+
 
             $this->manager->persist($item);
             $this->manager->commit();

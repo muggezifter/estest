@@ -8,20 +8,32 @@
         <tr>
             <th>Score</th>
             <th>Naam</th>
+            <th>Filter</th>
             <th>Categories</th>
-            <th>Matched queries</th>
+            <th>Days</th>
+            <th>Location</th>
+            <th>Matched</th>
 
         </tr>
         {% for result in results  %}
             <tr>
                 <td>{{ result._score }}</td>
-                <td>{{ result._source.name }}</td>
+                <td>{{ result._source.name|slice(0,15) }}{{ result._source.name|length > 15? "..." }}</td>
+                <td>{{ result._source.filter }}</td>
                 <td>
                 {%  for cat in result._source.categories %}
-                    {{ cat.name }}
+                    {{ cat.name|slice(0,3)  }}
                     {{ not loop.last ? ',' }}
                 {% endfor %}
                 </td>
+                <td>
+                {%  for day in result._source.days %}
+                    {{ day.name|slice(0,3) }}
+                    {{ not loop.last ? ',' }}
+                {% endfor %}
+                </td>
+
+                <td>{{ result._source.location }}</td>
                 <td>
                     {% if  result.matched_queries is defined %}
                     {%  for query in result.matched_queries %}
@@ -41,6 +53,10 @@
 
 {% block stylesheets %}
 <style>
+    * {
+        font-family: verdana, aria, helvetica, sans-serif;
+        font-size: 12px;
+    }
     body {
         margin:0; padding: 0;
     }

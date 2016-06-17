@@ -7,6 +7,15 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    estest.items.weekdays:
+         sun: Sunday
+         mon: Monday
+         tue: Tuesday
+         wed: Wednesday
+         thu: Thursday
+         fri: Friday
+         sat: Saturday
+
 
 framework:
     #esi:             ~

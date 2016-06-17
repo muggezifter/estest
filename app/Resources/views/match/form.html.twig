@@ -2,21 +2,38 @@
 
 {% block body %}
     <form method="post">
-     <h3>Categories</h3>
-     <label><input type="checkbox" name="neo" />Neo</label>
-     <label><input type="checkbox" name="tri" />Trinity</label>
-     <label><input type="checkbox" name="cyp" />Cypher</label>
-     <label><input type="checkbox" name="mor" />Morpheus</label>
-     <label><input type="checkbox" name="tan" />Tank</label>
+        <h4>Filter:</h4>
+        <label><input type="radio" name="filter" value="kel" checked='checked' />Kelvin</label>
+        <label><input type="radio" name="filter" value="toa" />Toaster</label>
+        <label><input type="radio" name="filter" value="lof" />Lo-Fi</label>
+        <h4>Categories:</h4>
+        <label><input type="checkbox" name="neo" />Neo</label>
+        <label><input type="checkbox" name="tri" />Trinity</label>
+        <label><input type="checkbox" name="cyp" />Cypher</label>
+        <label><input type="checkbox" name="mor" />Morpheus</label>
+        <label><input type="checkbox" name="tan" />Tank</label>
+        <h4>Days:</h4>
+        <label><input type="checkbox" name="sun" />Sunday</label>
+        <label><input type="checkbox" name="mon" />Monday</label>
+        <label><input type="checkbox" name="tue" />Tuesday</label>
+        <label><input type="checkbox" name="wed" />Wednesday</label>
+        <label><input type="checkbox" name="thu" />Thursday</label>
+        <label><input type="checkbox" name="fri" />Friday</label>
+        <label><input type="checkbox" name="sat" />Saturday</label>
         <input type="submit" />
     </form>
 {% endblock %}
 
 {% block stylesheets %}
 <style>
-label {
-    display: block;
-}
-
+    label {
+        display: block;
+    }
+    h4 {
+        margin-bottom: 2px;
+    }
+    input[type='submit'] {
+        margin-top: 10px;
+    }
 </style>
 {% endblock %}
