@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form method="post">
+     <label><input type="checkbox" name="neo" />Neo</label>
+     <label><input type="checkbox" name="tri" />Trinity</label>
+     <label><input type="checkbox" name="cyp" />Cypher</label>
+     <label><input type="checkbox" name="mor" />Morpheus</label>
+     <label><input type="checkbox" name="tan" />Tank</label>
+        <input type="submit" />
+    </form>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+label {
+    display: block;
+}
+
+</style>
+{% endblock %}

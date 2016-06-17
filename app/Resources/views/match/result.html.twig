@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Score</th>
+            <th>Naam</th>
+            <th>Categories</th>
+            <th>Matched queries</th>
+
+        </tr>
+        {% for result in results  %}
+            <tr>
+                <td>{{ result._score }}</td>
+                <td>{{ result._source.name }}</td>
+                <td>
+                {%  for cat in result._source.categories %}
+                    {{ cat.name }}
+                    {{ not loop.last ? ',' }}
+                {% endfor %}
+                </td>
+                <td>
+                    {% if  result.matched_queries is defined %}
+                    {%  for query in result.matched_queries %}
+                        {{ query }}
+                        {{ not loop.last ? ',' }}
+                    {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {{ count > 10 ?  "10" : count }}/{{ count }} results
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    td {
+        padding:0 5px
+    }
+
+
+</style>
+{% endblock %}
