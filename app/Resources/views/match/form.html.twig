@@ -8,30 +8,58 @@
     <form method="post">
         <h4>Filter:</h4>
         {% for key,value in filters %}
-            <label><input type="radio" name="filter" value="{{ key }}" {{ loop.first ? 'checked="checked"' }}/>{{ value }}</label>
+            <label><input type="radio" name="filter"
+                          value="{{ key }}" {{ loop.first ? 'checked="checked"' }}/>{{ value }}</label>
         {% endfor %}
+        <h4>Location:</h4>
+
+        <div>
+            <input type="text" name="location" id="location" value="51.50000,4.50000"/>
+            <button id="location_update">Update</button>
+        </div>
         <h4>Categories:</h4>
         {% for key,value in categories %}
-            <label><input type="checkbox" name="{{  key }}" />{{ value }}</label>
+            <label><input type="checkbox" name="{{ key }}"/>{{ value }}</label>
         {% endfor %}
         <h4>Days:</h4>
         {% for key,value in weekdays %}
-            <label><input type="checkbox" name="{{  key }}" />{{ value }}</label>
+            <label><input type="checkbox" name="{{ key }}"/>{{ value }}</label>
         {% endfor %}
-        <input type="submit" />
+        <input type="submit"/>
     </form>
 {% endblock %}
 
 {% block stylesheets %}
-<style>
-    label {
-        display: block;
-    }
-    h4 {
-        margin-bottom: 2px;
-    }
-    input[type='submit'] {
-        margin-top: 10px;
-    }
-</style>
+    <style>
+        label {
+            display: block;
+        }
+
+        h4 {
+            margin-bottom: 2px;
+        }
+
+        input[type='submit'] {
+            margin-top: 10px;
+        }
+    </style>
 {% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var lonMin = {{ range["lon"]["min"] }};
+        var lonRange = {{ range["lon"]["max"] }}-{{ range["lon"]["min"] }};
+
+        var latMin = {{ range["lat"]["min"] }};
+        var latRange = {{ range["lat"]["max"] }}-{{ range["lat"]["min"] }};
+
+        var input = document.getElementById("location");
+
+        document.getElementById("location_update").onclick = function (e) {
+            var lat = Number(latMin + (latRange *  Math.random())).toFixed(5);
+            var lon = Number(lonMin + (lonRange * Math.random())).toFixed(5);
+            input.value = lat + "," + lon;
+            e.preventDefault();
+        }
+    </script>
+{% endblock %}
+
