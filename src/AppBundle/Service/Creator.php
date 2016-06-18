@@ -16,20 +16,22 @@ class Creator extends ServiceBase
     /**
      * @var Faker
      */
-    private $faker;
+    private $faker = null;
 
     /**
      * Set up Faker.
      */
     private function prepare()
     {
-        $this->faker = Factory::create();
-        $this->faker->addProvider(new Person($this->faker));
-        $this->faker->addProvider(new Lorem($this->faker));
+        if (empty($this->faker)) {
+            $this->faker = Factory::create();
+            $this->faker->addProvider(new Person($this->faker));
+            $this->faker->addProvider(new Lorem($this->faker));
+        }
     }
 
     /**
-     * Create a nuber of items.
+     * Create a number of items.
      *
      * @param $number
      * @param OutputInterface $output
@@ -38,10 +40,11 @@ class Creator extends ServiceBase
     {
         $this->prepare();
 
-        for ($n = 0; $n < $number; $n++) {
+        while($number) {
             $item = $this->createItem();
             $this->manager->persist($item);
             $output && $output->writeln(sprintf("Item '%s' created", $item->name));
+            $number--;
         }
 
         $this->manager->commit();
