@@ -82,7 +82,7 @@ class EsCreateCommand extends ContainerAwareCommand
             $number = intval($number);
             if ($number < 0 || $number > 1000) {
                 $output->writeln("number should be between 1 and 1000");
-                return;;
+                return;
             }
             $nItems = $number;
         }

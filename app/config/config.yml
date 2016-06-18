@@ -36,6 +36,10 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        categories: "%estest.items.categories%"
+        weekdays: "%estest.items.weekdays%"
+        filters: "%estest.items.filters%"
 
 # Doctrine Configuration
 doctrine:
