@@ -10,13 +10,13 @@ use Faker\Factory;
 use Faker\Provider\Lorem;
 use Faker\Provider\nl_NL\Person;
 use ONGR\ElasticsearchBundle\Service\Manager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class EsCreateCommand extends ContainerAwareCommand
+class EsCreateCommand extends Command
 {
     /**
      * @var Manager
