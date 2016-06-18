@@ -44,10 +44,6 @@ class DefaultController extends Controller
      */
     public function matchPostAction(Request $request)
     {
-//        $matcher = new Matcher(
-//            $this->get('es.manager'),
-//            $this->getParameter('estest.items.weekdays')
-//        );
 
         $matcher = $this->get('app.estest.matcher');
         return $this->render('match/result.html.twig', $matcher->match($request));

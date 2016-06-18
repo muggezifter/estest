@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\MatchQuery;
+use ONGR\ElasticsearchDSL\Query\GeoDistanceQuery;
 use ONGR\ElasticsearchBundle\Result\Result;
 
 
@@ -74,6 +75,7 @@ class Matcher
         $search->addQuery(new MatchQuery("filter", $this->filters[$request->get("filter")]));
         $search->addQuery($this->makeBQ($request, $this->categories, 'categories', 2));
         $search->addQuery($this->makeBQ($request, $this->weekdays, 'days', 1));
+        $search->addQuery($this->makeGQ($request->get('location')));
 
         $queryArray = $search->toArray();
 
@@ -82,6 +84,22 @@ class Matcher
         $count = count($results);
 
         return compact("queryArray", "results", "count");
+    }
+
+    /**
+     * Make GeoDistance query.
+     *
+     * @param $location
+     * @return GeoDistanceQuery
+     */
+    private function makeGQ($location)
+    {
+        $gq = new GeoDistanceQuery(
+            "location",
+            "100km",
+            $location);
+        $gq->addParameter("_name","geo");
+        return $gq;
     }
 
     /**
