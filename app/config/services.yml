@@ -19,6 +19,13 @@ parameters:
          kel: Kelvin
          toa: Toaster
          lof: Lo-Fi
+    estest.items.location.range:
+         lon:
+             min: 4
+             max: 5
+         lat:
+             min: 51
+             max: 52
 
 services:
     app.es.create.command:
@@ -28,6 +35,7 @@ services:
             - '%estest.items.weekdays%'
             - '%estest.items.categories%'
             - '%estest.items.filters%'
+            - '%estest.items.location.range%'
         tags:
             - { name: console.command }
     app.estest.matcher:
