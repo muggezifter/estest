@@ -26,18 +26,18 @@ parameters:
          lat:
              min: 51
              max: 52
+    app.estest.creator.class: AppBundle\Service\Creator
 
 services:
-    app.es.create.command:
-        class: AppBundle\Command\EsCreateCommand
+    app.estest.creator:
+        class: '%app.estest.creator.class%'
         arguments:
             - '@es.manager'
             - '%estest.items.weekdays%'
             - '%estest.items.categories%'
             - '%estest.items.filters%'
             - '%estest.items.location.range%'
-        tags:
-            - { name: console.command }
+
     app.estest.matcher:
         class: AppBundle\Service\Matcher
         arguments:
@@ -45,3 +45,11 @@ services:
             - '%estest.items.weekdays%'
             - '%estest.items.categories%'
             - '%estest.items.filters%'
+            - '%estest.items.location.range%'
+
+    app.estest.create.command:
+        class: AppBundle\Command\EsCreateCommand
+        arguments:
+            - '@app.estest.creator'
+        tags:
+            - { name: console.command }

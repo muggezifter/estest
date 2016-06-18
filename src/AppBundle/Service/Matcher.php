@@ -2,7 +2,6 @@
 
 namespace AppBundle\Service;
 
-use ONGR\ElasticsearchBundle\Service\Manager;
 use Symfony\Component\HttpFoundation\Request;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
@@ -11,57 +10,8 @@ use ONGR\ElasticsearchDSL\Query\GeoDistanceQuery;
 use ONGR\ElasticsearchBundle\Result\Result;
 
 
-class Matcher
+class Matcher extends ServiceBase
 {
-    /**
-     * Categories array.
-     *
-     * @var array
-     */
-    private $categories;
-
-    /**
-     * Folters array.
-     *
-     * @var
-     */
-    private $filters;
-
-    /**
-     * Weekdays array.
-     *
-     * @var array
-     */
-    private $weekdays;
-
-    /**
-     * ES Manager.
-     *
-     * @var Manager
-     */
-    private $manager;
-
-    /**
-     * Construct a new matcher.
-     *
-     * @param Manager $manager
-     * @param array $weekdays
-     * @param array $categories
-     * @param array $filters
-     */
-    public function __construct(
-        Manager $manager,
-        array $weekdays,
-        array $categories,
-        array $filters
-    )
-    {
-        $this->manager = $manager;
-        $this->weekdays = $weekdays;
-        $this->categories = $categories;
-        $this->filters = $filters;
-    }
-
     /**
      * Return matches based on criteria in request.
      *
