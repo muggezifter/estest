@@ -1,7 +1,8 @@
 ElasticSearchTest
 =================
 
-A little Symfony project I wrote to familiarize myself with Elasticsearch.
+A little Symfony project I wrote to get familiar with Elasticsearch.
+
 It uses the [ongr Elasticsearch bundle](https://github.com/ongr-io/ElasticsearchBundle)
 
 - Create random documents and index them: `bin/console estest:create <number of docs>`
